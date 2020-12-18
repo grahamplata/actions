@@ -28,17 +28,17 @@ if [ ! -z "$GITHUB_WORKFLOW" ]; then
     # For PR events, we want to take the ref of the target branch, not the current. This ensures, for
     # instance, that a PR for a topic branch merging into `master` will use the `master` branch as the
     # target for a preview. Note that for push events, we of course want to use the actual branch.
-    if [ ! -z  "$IS_PR_WORKFLOW" ]; then
+    if [ ! -z "$IS_PR_WORKFLOW" ]; then
         # Not all PR events warrant running a preview. Many of them pertain to changes in assignments and
         # ownership, but we only want to run the preview if the action is "opened", "edited", or "synchronize".
-        PR_ACTION=$(jq -r ".action" < $GITHUB_EVENT_PATH)
+        PR_ACTION=$(jq -r ".action" <$GITHUB_EVENT_PATH)
         if [ "$PR_ACTION" != "opened" ] && [ "$PR_ACTION" != "edited" ] && [ "$PR_ACTION" != "synchronize" ]; then
             echo -e "PR event ($PR_ACTION) contains no changes and does not warrant a Pulumi Preview"
             echo -e "Skipping Pulumi action altogether..."
             exit 0
         fi
 
-        BRANCH=$(jq -r ".pull_request.base.ref" < $GITHUB_EVENT_PATH)
+        BRANCH=$(jq -r ".pull_request.base.ref" <$GITHUB_EVENT_PATH)
     else
         BRANCH="$GITHUB_REF"
     fi
@@ -80,11 +80,11 @@ if [ ! -z "$GOOGLE_CREDENTIALS" ]; then
     export GOOGLE_APPLICATION_CREDENTIALS="$(mktemp).json"
     # Check if GOOGLE_CREDENTIALS is base64 encoded
     if [[ $GOOGLE_CREDENTIALS =~ ^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$ ]]; then
-        echo "$GOOGLE_CREDENTIALS"|base64 -d > $GOOGLE_APPLICATION_CREDENTIALS
+        echo "$GOOGLE_CREDENTIALS" | base64 -d >$GOOGLE_APPLICATION_CREDENTIALS
         # unset for other gcloud commands using this variable.
         unset GOOGLE_CREDENTIALS
     else
-        echo "$GOOGLE_CREDENTIALS" > $GOOGLE_APPLICATION_CREDENTIALS
+        echo "$GOOGLE_CREDENTIALS" >$GOOGLE_APPLICATION_CREDENTIALS
     fi
     gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
     gcloud --quiet auth configure-docker $GOOGLE_DOCKER_HOSTNAME_LIST
@@ -101,20 +101,24 @@ fi
 # Similarly, run yarn install as applicable for the same reasons.
 if [ -e package.json ]; then
     if [ -f yarn.lock ] || [ ! -z $USE_YARN ]; then
+        # Set npm auth token if one is provided.
+        if [ ! -z "$NPM_AUTH_TOKEN" ]; then
+            echo "//npm.pkg.github.com/:_authToken=$NPM_AUTH_TOKEN" >~/.npmrc
+        fi
         if [ ! -z "$YARN_WORKSPACE" ]; then
             yarn workspace "$YARN_WORKSPACE" install
         else
             yarn install
-        fi    
+        fi
     else
         # Set npm auth token if one is provided.
         if [ ! -z "$NPM_AUTH_TOKEN" ]; then
-            echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" > ~/.npmrc
+            echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" >~/.npmrc
         fi
         if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
-          npm ci
+            npm ci
         else
-          npm install
+            npm install
         fi
     fi
 fi
@@ -156,6 +160,10 @@ $(cat $OUTPUT_FILE)
         echo "Commenting on PR $COMMENTS_URL"
         curl -s -S -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL"
     fi
+fi
+
+if [ "$INPUT_MAP_OUTPUT" = "all" ]; then
+    pulumi stack output -j | jq --raw-output 'to_entries | map("::set-output name=" + .key+"::" + (.value | tostring)+"^") | .[]' | xargs -d '^' echo
 fi
 
 exit $EXIT_CODE

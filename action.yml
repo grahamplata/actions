@@ -1,6 +1,6 @@
 name: 'Pulumi CLI Action'
 description: 'A Github Action that allows you to interact with Pulumi as part of CI / CD pipelines'
-author: 'Pulumi Corporation'
+author: 'grahamplata'
 inputs:
   command:
     description: 'The Pulumi command to run as part of the container'
