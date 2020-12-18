@@ -139,7 +139,7 @@ fi
 # Now just pass along all arguments to the Pulumi CLI, sending the output to a file for
 # later use. Note that we exit immediately on failure (under set -e), so we `tee` stdout, but
 # allow errors to be surfaced in the Actions log.
-PULUMI_COMMAND="pulumi $EXTRA_ARGS $*"
+PULUMI_COMMAND="pulumi $* $EXTRA_ARGS"
 OUTPUT_FILE=$(mktemp)
 echo "#### :tropical_drink: \`$PULUMI_COMMAND\`"
 bash -c "$PULUMI_COMMAND" | tee $OUTPUT_FILE
