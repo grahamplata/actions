@@ -27,7 +27,7 @@ jobs:
         with:
           dotnet-version: 3.1
       - name: Install pulumi
-        uses: pulumi/action-install-pulumi-cli@v1.0.1
+        uses: pulumi/action-install-pulumi-cli@v1.0.2
       - name: Create local stack
         run: |
           pulumi login --local
