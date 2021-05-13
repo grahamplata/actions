@@ -690,10 +690,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@pulumi/pulumi@^2.23.2":
-  version "2.23.2"
-  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-2.23.2.tgz#f6677ea16359e2ddbe3498975e20e60716a76a5b"
-  integrity sha512-V5vnzWdtTPlRBp6Fcexf9X4+IZH8e9YA1jvnuGVboLpZp/abmj1G1PFIhQ1YwLJsph87pHlAweDY17Li9XF42w==
+"@pulumi/pulumi@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@pulumi/pulumi/-/pulumi-3.2.1.tgz#c7c979aa29d595ea691426b78d44bdc6b9e8d793"
+  integrity sha512-fFkFEUHSM3gCV+TdwPyKuJOS5EsCzjYVfE6Qyz4UR+qRmExxNkOBX73Uc+BkD79vpqs4B9mPNlpPC9UHGBDvLg==
   dependencies:
     "@grpc/grpc-js" "^1.2.7"
     "@logdna/tail-file" "^2.0.6"
@@ -830,10 +830,10 @@
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.1.tgz#459c65fa1867dafe6a8f322c4c51695663cc55e9"
   integrity sha512-5tXH6Bx/kNGd3MgffdmP4dy2Z+G4eaXw0SE81Tq3BNadtnMR5/ySMzX4SLEzHJzSmPNn4HIdpQsBvXMUykr58w==
 
-"@types/node@*", "@types/node@>= 8", "@types/node@>=12.12.47", "@types/node@~14.14.35":
-  version "14.14.35"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.35.tgz#42c953a4e2b18ab931f72477e7012172f4ffa313"
-  integrity sha512-Lt+wj8NVPx0zUmUwumiVXapmaLUcAk3yPuHCFVXras9k5VT9TdhJqKqGVUQCD60OTMCl0qxJ57OiTL0Mic3Iag==
+"@types/node@*", "@types/node@>= 8", "@types/node@>=12.12.47", "@types/node@~14.14.36":
+  version "14.14.36"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.36.tgz#5637905dbb15c30a33a3c65b9ef7c20e3c85ebad"
+  integrity sha512-kjivUwDJfIjngzbhooRnOLhGYz6oRFi+L+EpMjxroDYXwDw9lHrJJ43E+dJ6KAd3V3WxWAJ/qZE9XKYHhjPOFQ==
 
 "@types/node@^13.7.0":
   version "13.13.40"
